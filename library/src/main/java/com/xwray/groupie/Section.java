@@ -44,6 +44,7 @@ public class Section extends NestedGroup {
 
     public Section(@Nullable Group header, @NonNull Collection<? extends Group> children) {
         this.header = header;
+        this.header.registerGroupDataObserver(this);
         addAll(children);
     }
 
@@ -399,11 +400,13 @@ public class Section extends NestedGroup {
             throw new NullPointerException("Header can't be null.  Please use removeHeader() instead!");
         int previousHeaderItemCount = getHeaderItemCount();
         this.header = header;
+        this.header.registerGroupDataObserver(this);
         notifyHeaderItemsChanged(previousHeaderItemCount);
     }
 
     public void removeHeader() {
         int previousHeaderItemCount = getHeaderItemCount();
+        this.header.unregisterGroupDataObserver(this);
         this.header = null;
         notifyHeaderItemsChanged(previousHeaderItemCount);
     }
